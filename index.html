@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fancy Number Sorter - Xeon X Ozil</title>
+    <title>Advanced Fancy Number Sorter - COD LUCAS</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
     <style>
@@ -22,7 +22,6 @@
             --border-color: #e0e0e0;
             --accent-color: #000000;
             --accent-hover: #333333;
-            --success-color: #000000;
             --shadow: rgba(0, 0, 0, 0.1);
         }
 
@@ -35,7 +34,6 @@
             --border-color: #333333;
             --accent-color: #ffffff;
             --accent-hover: #cccccc;
-            --success-color: #ffffff;
             --shadow: rgba(255, 255, 255, 0.1);
         }
 
@@ -329,18 +327,6 @@
             font-size: 1.5em;
         }
 
-        .section-divider {
-            margin: 30px 0;
-            padding: 15px;
-            background: var(--bg-card);
-            border: 2px solid var(--border-color);
-            border-radius: 10px;
-            text-align: center;
-            font-weight: bold;
-            color: var(--accent-color);
-            font-size: 1.1em;
-        }
-
         .number-item {
             background: var(--bg-card);
             padding: 12px 15px;
@@ -350,9 +336,6 @@
             font-size: 1.1em;
             box-shadow: 0 2px 5px var(--shadow);
             transition: transform 0.2s;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             border: 1px solid var(--border-color);
         }
 
@@ -360,9 +343,49 @@
             transform: translateX(5px);
         }
 
+        .number-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
         .number-text {
-            flex: 1;
+            font-size: 1.2em;
+            font-weight: bold;
             color: var(--text-primary);
+        }
+
+        .score-badge {
+            background: #000000;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .patterns-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .pattern-badge {
+            background: var(--bg-secondary);
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .pattern-badge .pattern-type {
+            font-weight: bold;
+            color: var(--accent-color);
         }
 
         .copy-single-btn {
@@ -406,34 +429,31 @@
             border-radius: 10px;
         }
 
-        @keyframes slideIn {
-            from {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
+        .download-btn {
+            background: #000000;
+            color: white;
+            border: 1px solid #333333;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 15px;
+            width: 100%;
         }
 
-        @keyframes slideOut {
-            from {
-                transform: translateX(0);
-                opacity: 1;
-            }
-            to {
-                transform: translateX(400px);
-                opacity: 0;
-            }
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px var(--shadow);
+            background: #1a1a1a;
         }
     </style>
 </head>
 <body class="dark">
     <header>
         <div class="logo">
-            <img src="https://files.catbox.moe/nowbrl.jpg" alt="Logo">
-            <span>Xeon</span>
+            <img src="https://files.catbox.moe/yygrk5.jpg" alt="Logo">
+            <span>COD LUCAS</span>
         </div>
         <div class="theme-toggle" id="themeToggle">
             <div class="theme-icon">
@@ -485,7 +505,7 @@
     </header>
 
     <div class="container">
-        <h1>✨ Fancy Number Sorter</h1>
+        <h1>✨ Advanced Fancy Number Sorter</h1>
         
         <div class="upload-area" id="uploadArea">
             <div class="upload-icon">📄</div>
@@ -500,7 +520,7 @@
 
         <div class="loading" id="loading">
             <div class="spinner"></div>
-            Processing your file...
+            Processing your file and analyzing patterns...
         </div>
 
         <div class="results" id="results">
@@ -510,18 +530,15 @@
                 <p>✨ Fancy Found: <strong id="fancyCount">0</strong></p>
                 
                 <div class="copy-buttons">
-                    <button class="btn copy-btn" id="copyFancyBtn">📋 Copy Fancy Numbers</button>
-                    <button class="btn copy-btn" id="copyAllBtn">📋 Copy All Numbers</button>
+                    <button class="btn copy-btn" id="copyTop50Btn">📋 Copy Top 50</button>
+                    <button class="btn copy-btn" id="copyAllFancyBtn">📋 Copy All Fancy</button>
                 </div>
+                <button class="btn download-btn" id="downloadBtn">💾 Download Complete List</button>
             </div>
 
             <div class="number-list">
-                <h3>🏆 All Fancy Numbers:</h3>
+                <h3>🏆 Top 50 Fancy Numbers (Sorted by Score):</h3>
                 <div id="fancyNumberList"></div>
-                
-                <div class="section-divider">📋 Regular Numbers Below</div>
-                
-                <div id="regularNumberList"></div>
             </div>
         </div>
     </div>
@@ -538,13 +555,13 @@
         const processBtn = document.getElementById('processBtn');
         const loading = document.getElementById('loading');
         const results = document.getElementById('results');
-        const copyFancyBtn = document.getElementById('copyFancyBtn');
-        const copyAllBtn = document.getElementById('copyAllBtn');
+        const copyTop50Btn = document.getElementById('copyTop50Btn');
+        const copyAllFancyBtn = document.getElementById('copyAllFancyBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
         
         let selectedFile = null;
-        let allNumbers = { fancy: [], regular: [] };
+        let allFancyNumbers = [];
 
-        // Theme toggle functionality
         themeToggle.addEventListener('click', (e) => {
             e.stopPropagation();
             themeMenu.classList.toggle('active');
@@ -571,7 +588,6 @@
             });
         });
 
-        // Upload functionality
         uploadArea.addEventListener('click', () => fileInput.click());
 
         uploadArea.addEventListener('dragover', (e) => {
@@ -624,10 +640,19 @@
                     text = await extractTextFromDocx(selectedFile);
                 }
 
-                const numbers = extractNumbers(text);
-                const sortedNumbers = sortNumbers(numbers);
-                allNumbers = sortedNumbers;
-                displayResults(numbers.length, sortedNumbers);
+                const numbers = extractNumbersFromText(text);
+                
+                if (numbers.length === 0) {
+                    alert('❌ No valid numbers found in the file (8-15 digits)');
+                    loading.classList.remove('show');
+                    processBtn.disabled = false;
+                    return;
+                }
+
+                const fancyNumbers = analyzeFancyNumbers(numbers);
+                allFancyNumbers = fancyNumbers;
+                
+                displayResults(numbers.length, fancyNumbers);
 
             } catch (error) {
                 alert('Error processing file: ' + error.message);
@@ -658,156 +683,207 @@
             return result.value;
         }
 
-        function extractNumbers(text) {
-            const numberPattern = /\b\d{10,}\b/g;
-            const matches = text.match(numberPattern) || [];
-            return [...new Set(matches)];
-        }
-
-        function sortNumbers(numbers) {
-            const fancy = [];
-            const regular = [];
-
-            for (const num of numbers) {
-                const score = calculateFancyScore(num);
-                if (score > 0) {
-                    fancy.push({ number: num, score: score });
-                } else {
-                    regular.push(num);
-                }
-            }
-
-            fancy.sort((a, b) => b.score - a.score);
-            return { fancy, regular };
-        }
-
-        function calculateFancyScore(num) {
-            let score = 0;
-            const digits = num.split('');
+        function extractNumbersFromText(text) {
+            const numbers = [];
+            const lines = text.split(/\r?\n/);
             
-            const digitCounts = {};
-            digits.forEach(d => {
-                digitCounts[d] = (digitCounts[d] || 0) + 1;
-            });
-
-            for (const count of Object.values(digitCounts)) {
-                if (count >= 4) score += count * 10;
-                else if (count >= 3) score += count * 5;
-            }
-
-            for (let i = 0; i < digits.length - 2; i++) {
-                const d1 = parseInt(digits[i]);
-                const d2 = parseInt(digits[i + 1]);
-                const d3 = parseInt(digits[i + 2]);
-                
-                if (d2 === d1 + 1 && d3 === d2 + 1) score += 3;
-                if (d2 === d1 - 1 && d3 === d2 - 1) score += 3;
-            }
-
-            for (let i = 0; i < digits.length - 3; i++) {
-                if (digits[i] === digits[i+1] && digits[i+2] === digits[i+3]) {
-                    score += 5;
+            lines.forEach(line => {
+                const cleanLine = line.trim();
+                if (cleanLine) {
+                    const numberMatch = cleanLine.match(/\d{8,15}/);
+                    if (numberMatch) {
+                        numbers.push(numberMatch[0]);
+                    }
                 }
-            }
-
-            return score;
+            });
+            
+            return [...new Set(numbers)];
         }
 
-        function displayResults(total, data) {
+        function findFancyPatterns(number) {
+            const patterns = [];
+            const numStr = number.toString();
+            
+            const consecutiveRepeats = numStr.match(/(\d)\1{2,}/g);
+            if (consecutiveRepeats) {
+                consecutiveRepeats.forEach(match => {
+                    patterns.push({
+                        type: 'Consecutive Repeats',
+                        pattern: match,
+                        score: match.length * 10
+                    });
+                });
+            }
+            
+            const sequentialUp = numStr.match(/(?:0123|1234|2345|3456|4567|5678|6789)/g);
+            if (sequentialUp) {
+                sequentialUp.forEach(match => {
+                    patterns.push({
+                        type: 'Sequential Up',
+                        pattern: match,
+                        score: match.length * 8
+                    });
+                });
+            }
+            
+            const sequentialDown = numStr.match(/(?:9876|8765|7654|6543|5432|4321|3210)/g);
+            if (sequentialDown) {
+                sequentialDown.forEach(match => {
+                    patterns.push({
+                        type: 'Sequential Down',
+                        pattern: match,
+                        score: match.length * 8
+                    });
+                });
+            }
+            
+            const doubleDigits = numStr.match(/(\d\d)\1+/g);
+            if (doubleDigits) {
+                doubleDigits.forEach(match => {
+                    patterns.push({
+                        type: 'Double Pattern',
+                        pattern: match,
+                        score: match.length * 6
+                    });
+                });
+            }
+            
+            const palindrome = numStr.match(/(\d)(\d)\2\1/g);
+            if (palindrome) {
+                palindrome.forEach(match => {
+                    patterns.push({
+                        type: 'Palindrome',
+                        pattern: match,
+                        score: 15
+                    });
+                });
+            }
+            
+            const alternating = numStr.match(/(\d)(\d)\1\2/g);
+            if (alternating) {
+                alternating.forEach(match => {
+                    patterns.push({
+                        type: 'Alternating',
+                        pattern: match,
+                        score: 12
+                    });
+                });
+            }
+            
+            return patterns;
+        }
+
+        function analyzeFancyNumbers(numbers) {
+            const fancyNumbers = [];
+            
+            numbers.forEach(number => {
+                const patterns = findFancyPatterns(number);
+                
+                if (patterns.length > 0) {
+                    const totalScore = patterns.reduce((sum, p) => sum + p.score, 0);
+                    
+                    fancyNumbers.push({
+                        number: number,
+                        patterns: patterns,
+                        score: totalScore,
+                        patternCount: patterns.length
+                    });
+                }
+            });
+            
+            return fancyNumbers.sort((a, b) => b.score - a.score);
+        }
+
+        function displayResults(total, fancyNumbers) {
             document.getElementById('totalCount').textContent = total;
-            document.getElementById('fancyCount').textContent = data.fancy.length;
+            document.getElementById('fancyCount').textContent = fancyNumbers.length;
 
             const fancyNumberList = document.getElementById('fancyNumberList');
-            const regularNumberList = document.getElementById('regularNumberList');
-            
             fancyNumberList.innerHTML = '';
-            regularNumberList.innerHTML = '';
 
-            data.fancy.forEach(item => {
+            const top50 = fancyNumbers.slice(0, 50);
+
+            top50.forEach((item) => {
                 const div = document.createElement('div');
                 div.className = 'number-item';
+                
+                const header = document.createElement('div');
+                header.className = 'number-header';
                 
                 const numberText = document.createElement('span');
                 numberText.className = 'number-text';
                 numberText.textContent = '+' + item.number;
+                
+                const scoreBadge = document.createElement('span');
+                scoreBadge.className = 'score-badge';
+                scoreBadge.textContent = `Score: ${item.score}`;
                 
                 const copyBtn = document.createElement('button');
                 copyBtn.className = 'copy-single-btn';
                 copyBtn.textContent = '📋 Copy';
                 copyBtn.onclick = () => copySingleNumber('+' + item.number);
                 
-                div.appendChild(numberText);
-                div.appendChild(copyBtn);
+                header.appendChild(numberText);
+                header.appendChild(scoreBadge);
+                header.appendChild(copyBtn);
+                
+                const patternsList = document.createElement('div');
+                patternsList.className = 'patterns-list';
+                
+                item.patterns.forEach(pattern => {
+                    const patternBadge = document.createElement('span');
+                    patternBadge.className = 'pattern-badge';
+                    patternBadge.innerHTML = `<span class="pattern-type">${pattern.type}:</span> ${pattern.pattern}`;
+                    patternsList.appendChild(patternBadge);
+                });
+                
+                div.appendChild(header);
+                div.appendChild(patternsList);
                 fancyNumberList.appendChild(div);
-            });
-
-            data.regular.forEach(number => {
-                const div = document.createElement('div');
-                div.className = 'number-item';
-                
-                const numberText = document.createElement('span');
-                numberText.className = 'number-text';
-                numberText.textContent = '+' + number;
-                
-                const copyBtn = document.createElement('button');
-                copyBtn.className = 'copy-single-btn';
-                copyBtn.textContent = '📋 Copy';
-                copyBtn.onclick = () => copySingleNumber('+' + number);
-                
-                div.appendChild(numberText);
-                div.appendChild(copyBtn);
-                regularNumberList.appendChild(div);
             });
 
             results.classList.add('show');
         }
 
-        copyFancyBtn.addEventListener('click', () => {
-            const fancyNumbers = allNumbers.fancy.map(item => '+' + item.number).join('\n');
-            copyToClipboard(fancyNumbers, '✅ Fancy numbers copied to clipboard!');
-        });
-
-        copyAllBtn.addEventListener('click', () => {
-            const fancyNumbers = allNumbers.fancy.map(item => '+' + item.number);
-            const regularNumbers = allNumbers.regular.map(num => '+' + num);
-            const allNumbersList = [...fancyNumbers, ...regularNumbers].join('\n');
-            copyToClipboard(allNumbersList, '✅ All numbers copied to clipboard!');
-        });
-
-        function copyToClipboard(text, message) {
-            navigator.clipboard.writeText(text).then(() => {
-                alert(message);
-            }).catch(err => {
-                alert('❌ Failed to copy: ' + err.message);
-            });
-        }
-
         function copySingleNumber(number) {
             navigator.clipboard.writeText(number).then(() => {
-                const toast = document.createElement('div');
-                toast.textContent = '✅ Copied!';
-                toast.style.cssText = `
-                    position: fixed;
-                    top: 20px;
-                    right: 20px;
-                    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-                    color: white;
-                    padding: 15px 25px;
-                    border-radius: 10px;
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-                    z-index: 1000;
-                    font-weight: bold;
-                    animation: slideIn 0.3s ease-out;
-                `;
-                document.body.appendChild(toast);
-                setTimeout(() => {
-                    toast.style.animation = 'slideOut 0.3s ease-out';
-                    setTimeout(() => toast.remove(), 300);
-                }, 1500);
+                alert('✅ Number copied: ' + number);
             }).catch(err => {
-                alert('❌ Failed to copy: ' + err.message);
+                console.error('Failed to copy:', err);
             });
         }
+
+        copyTop50Btn.addEventListener('click', () => {
+            const top50 = allFancyNumbers.slice(0, 50);
+            const text = top50.map(item => '+' + item.number).join('\n');
+            navigator.clipboard.writeText(text).then(() => {
+                alert('✅ Top 50 numbers copied to clipboard!');
+            });
+        });
+
+        copyAllFancyBtn.addEventListener('click', () => {
+            const text = allFancyNumbers.map(item => '+' + item.number).join('\n');
+            navigator.clipboard.writeText(text).then(() => {
+                alert('✅ All fancy numbers copied to clipboard!');
+            });
+        });
+
+        downloadBtn.addEventListener('click', () => {
+            const content = allFancyNumbers.map((item, index) => {
+                const patterns = item.patterns.map(p => `${p.type}: ${p.pattern}`).join(', ');
+                return `${index + 1}. +${item.number} (Score: ${item.score})\n   Patterns: ${patterns}`;
+            }).join('\n\n');
+            
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'fancy-numbers-complete-list.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
     </script>
 </body>
 </html>
